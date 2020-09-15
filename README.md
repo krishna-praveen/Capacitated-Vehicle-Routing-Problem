@@ -191,6 +191,18 @@ exceeds the vechicle capacity the subroute is closed and assigned to that vechic
 the customers in the sequence is fulfilled. Thus we will get subroutes from routes and number of subroutes
 is equivalent to number of vechicles.
 
+```python
+routeToSubroute(individual, instance)
+```
+decodes `individual` to `route`. Refer the below example
+
+```python
+# Individual
+[12, 14, 16, 8, 9, 11, 21, 20, 5, 3, 4, 6, 10, 7, 2, 1, 22, 25, 24, 23, 18, 19, 17, 15, 13]
+
+# Route
+[[12, 14, 16], [8, 9, 11, 21, 20], [5, 3, 4, 6, 10], [7, 2, 1], [22, 25, 24], [23, 18, 19, 17], [15, 13]]
+```
 
 
 

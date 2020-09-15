@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop4000_crossProb0.8_mutProb0.02_numGen180.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen150.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen300.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen400.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_algo_methods.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_route.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plottest.py" beforeDir="false" afterPath="$PROJECT_DIR$/plottest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +65,7 @@
       <workItem from="1600096718117" duration="2141000" />
       <workItem from="1600098870281" duration="70000" />
       <workItem from="1600098949361" duration="4741000" />
-      <workItem from="1600149568407" duration="19717000" />
+      <workItem from="1600149568407" duration="20716000" />
     </task>
     <servers />
   </component>
