@@ -15,7 +15,7 @@ Multiobjective python implementation of capacitated vehicle routing
     - [Text File Format](#text-file-format)
     - [JSON Format](#json-format)
     - [Convert `*.txt` to `*.json`](#convert-txt-to-json)
-- [NSGA-II Implementation](#ga-implementation)
+- [NSGA-II Implementation](#nsga-ii-implementation)
     - [Individual (Chromosome)](#individual-chromosome)
         - [Individual Coding](#individual-coding)
         - [Individual Decoding](#individual-decoding)

@@ -2,8 +2,11 @@
 import os
 import io
 import random
-from csv import DictWriter
+import numpy
 import fnmatch
+import csv
+
+from csv import DictWriter
 from json import load, dump
 from deap import base, creator, tools, algorithms, benchmarks
 from deap.benchmarks.tools import diversity, convergence, hypervolume
@@ -26,7 +29,7 @@ def load_instance(json_file):
 
 
 # Take a route of given length, divide it into subroute where each subroute is assigned to vehicle
-def ind2route(individual, instance):
+def routeToSubroute(individual, instance):
     """
     Inputs: Sequence of customers that a route has
             Loaded instance problem
@@ -62,6 +65,23 @@ def ind2route(individual, instance):
     return route
 
 
+def printRoute(route, merge=False):
+    route_str = '0'
+    sub_route_count = 0
+    for sub_route in route:
+        sub_route_count += 1
+        sub_route_str = '0'
+        for customer_id in sub_route:
+            sub_route_str = f'{sub_route_str} - {customer_id}'
+            route_str = f'{route_str} - {customer_id}'
+        sub_route_str = f'{sub_route_str} - 0'
+        if not merge:
+            print(f'  Vehicle {sub_route_count}\'s route: {sub_route_str}')
+        route_str = f'{route_str} - 0'
+    if merge:
+        print(route_str)
+
+
 # Calculate the number of vehicles required, given a route
 def getNumVehiclesRequired(individual, instance):
     """
@@ -70,7 +90,7 @@ def getNumVehiclesRequired(individual, instance):
     Outputs: Number of vechiles according to the given problem and the route
     """
     # Get the route with subroutes divided according to demand
-    updated_route = ind2route(individual, instance)
+    updated_route = routeToSubroute(individual, instance)
     num_of_vehicles = len(updated_route)
     return num_of_vehicles
 
@@ -87,7 +107,7 @@ def getRouteCost(individual, instance, unit_cost=1):
         - Total cost for the route taken by all the vehicles
     """
     total_cost = 0
-    updated_route = ind2route(individual, instance)
+    updated_route = routeToSubroute(individual, instance)
 
     for sub_route in updated_route:
         # Initializing the subroute distance to 0
@@ -173,9 +193,9 @@ def testroutes():
     print(f"Best individual 300 generations is {best_ind_300_gen}")
 
     # Getting routes
-    print(f"Subroutes for first sample individual is {ind2route(sample_individual, test_instance)}")
-    print(f"Subroutes for second sample indivudal is {ind2route(sample_ind_2, test_instance)}")
-    print(f"Subroutes for best sample indivudal is {ind2route(best_ind_300_gen, test_instance)}")
+    print(f"Subroutes for first sample individual is {routeToSubroute(sample_individual, test_instance)}")
+    print(f"Subroutes for second sample indivudal is {routeToSubroute(sample_ind_2, test_instance)}")
+    print(f"Subroutes for best sample indivudal is {routeToSubroute(best_ind_300_gen, test_instance)}")
 
     # Getting num of vehicles
     print(f"Vehicles for sample individual {getNumVehiclesRequired(sample_individual, test_instance)}")
@@ -185,6 +205,10 @@ def testroutes():
 # testroutes()
 
 
+# Crossover method with ordering
+# This method will let us escape illegal routes with multiple occurences
+#   of customers that might happen. We would never get illegal individual from this
+#   crossOver
 def cxOrderedVrp(input_ind1, input_ind2):
     # Modifying this to suit our needs
     #  If the sequence does not contain 0, this throws error
@@ -244,7 +268,11 @@ def testcrossover():
 
 
 def mutationShuffle(individual, indpb):
-
+    """
+    Inputs : Individual route
+             Probability of mutation betwen (0,1)
+    Outputs : Mutated individual according to the probability
+    """
     size = len(individual)
     for i in range(size):
         if random.random() < indpb:
@@ -266,6 +294,58 @@ def testmutation():
 
 # testmutation()
 
+## Statistics and Logging
+
+def createStatsObjs():
+    # Method to create stats and logbook objects
+    """
+    Inputs : None
+    Outputs : tuple of logbook and stats objects.
+    """
+    stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats.register("avg", numpy.mean, axis=0)
+    stats.register("std", numpy.std, axis=0)
+    stats.register("min", numpy.min, axis=0)
+    stats.register("max", numpy.max, axis=0)
+
+    # Methods for logging
+    logbook = tools.Logbook()
+    logbook.header = "Generation", "evals", "avg", "std", "min", "max", "best_one", "fitness_best_one"
+    return logbook, stats
+
+
+def recordStat(invalid_ind, logbook, pop, stats, gen):
+    """
+    Inputs : invalid_ind - Number of children for which fitness is calculated
+             logbook - Logbook object that logs data
+             pop - population
+             stats - stats object that compiles statistics
+    Outputs: None, prints the logs
+    """
+    record = stats.compile(pop)
+    best_individual = tools.selBest(pop, 1)[0]
+    record["best_one"] = best_individual
+    record["fitness_best_one"] = best_individual.fitness
+    logbook.record(Generation=gen, evals=len(invalid_ind), **record)
+    print(logbook.stream)
+
+
+## Exporting CSV files
+def exportCsv(csv_file_name, logbook):
+    csv_columns = logbook[0].keys()
+    csv_path = os.path.join(BASE_DIR, "results", csv_file_name)
+    try:
+        with open(csv_path, 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+            writer.writeheader()
+            for data in logbook:
+                writer.writerow(data)
+    except IOError:
+        print("I/O error")
+
+
+
+
 
 
 def nsga2vrp():
@@ -278,13 +358,12 @@ def nsga2vrp():
 
     # Setting variables
     pop_size = 400
-
     # Crossover probability
     cross_prob = 0.8
     # Mutation probability
     mut_prob = 0.02
     # Number of generations to run
-    num_gen = 300
+    num_gen = 3
 
     # Developing Deap algorithm from base problem    
     creator.create('FitnessMin', base.Fitness, weights=(-1.0, -1.0))
@@ -312,13 +391,16 @@ def nsga2vrp():
     # Mutation method
     toolbox.register("mutate", mutationShuffle, indpb = mut_prob)
 
+    # Creating logbook and Stats object, We are going to use them to record data
+    logbook, stats = createStatsObjs()
+
     ### Starting ga process
     print(f"Generating population with size of {pop_size}")
     pop = toolbox.population(n=pop_size)
 
     ## Print Checks
-    print(len(pop))
-    print(f"First element of pop is {pop[0]}")
+    # print(len(pop))
+    # print(f"First element of pop is {pop[0]}")
 
     # Getting all invalid individuals who don't have fitness
     invalid_ind = [ind for ind in pop if not ind.fitness.valid]
@@ -357,6 +439,11 @@ def nsga2vrp():
     # for i in pop:
     #     print(f"Crowd distance is {i.fitness.crowding_dist}")
 
+    # After generating population and assiging fitness to them
+    # Checking logs
+    print("Recording the Data and Statistics")
+    recordStat(invalid_ind, logbook, pop, stats,gen=0)
+
     # Starting the generation process
     for gen in range(num_gen):
         print(f"######## Currently Evaluating {gen} Generation ######## ")
@@ -366,7 +453,7 @@ def nsga2vrp():
         offspring = [toolbox.clone(ind) for ind in offspring]
 
         # Print Checks
-        print(f"Offsprings length is {len(offspring)}")
+        # print(f"Offsprings length is {len(offspring)}")
         # print(f"Offsprings are {offspring}")
 
         # Performing , crossover and mutation operations according to their probabilities
@@ -384,8 +471,8 @@ def nsga2vrp():
    
 
         # Print Checks
-        print(f"The len of offspring after operations {len(offspring)}")
-        print(f"Individuals with invalid fitness {len([ind for ind in offspring if not ind.fitness.valid])}")
+        # print(f"The len of offspring after operations {len(offspring)}")
+        # print(f"Individuals with invalid fitness {len([ind for ind in offspring if not ind.fitness.valid])}")
 
         # Calculating fitness for all the invalid individuals in offspring
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
@@ -397,17 +484,36 @@ def nsga2vrp():
         # Recalcuate the population with newly added offsprings and parents
         # We are using NSGA2 selection method, We have to select same population size
         pop = toolbox.select(pop + offspring, pop_size)
-        print(f"New population size is {len(pop)}")
+
+
+        # Recording stats in this generation
+        recordStat(invalid_ind, logbook, pop, stats,gen+1)
 
     print(f"{20*'#'} End of Generations {20*'#'} ")
 
     best_individual = tools.selBest(pop, 1)[0]
+
+    # Printing the best after all generations
     print(f"Best individual is {best_individual}")
-    print(f"Fitness of best individual is {best_individual.fitness.values}")
+    print(f"Number of vechicles required are {best_individual.fitness.values[0]}")
+    print(f"Cost required for the transportation is {best_individual.fitness.values[1]}")
+
+    # Printing the route from the best individual
+    printRoute(routeToSubroute(best_individual, json_instance))
+
+    # Extra
+    print(f"Testing whether we can export logbook")
+    print(logbook[1].keys())
+
+    # Exporting csv
+    csv_file_name = f"{json_instance['instance_name']}_pop{pop_size}_crossProb{cross_prob}_mutProb{mut_prob}_numGen{num_gen}.csv"
+    exportCsv(csv_file_name, logbook)
 
 
 
-# nsga2vrp()
+
+
+nsga2vrp()
 
 
 
@@ -496,7 +602,7 @@ def run_gavrptw(instance_name, unit_cost, init_cost, wait_cost, delay_cost, ind_
     best_ind = tools.selBest(pop, 1)[0]
     print(f'Best individual: {best_ind}')
     print(f'Fitness: {best_ind.fitness.values[0]}')
-    print_route(ind2route(best_ind, instance))
+    printRoute(routeToSubroute(best_ind, instance))
     print(f'Total cost: {1 / best_ind.fitness.values[0]}')
     if export_csv:
         csv_file_name = f'{instance_name}_uC{unit_cost}_iC{init_cost}_wC{wait_cost}' \
