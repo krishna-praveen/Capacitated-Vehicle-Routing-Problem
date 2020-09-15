@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/icav_vrp.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/convertingtextjson.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/json/Input_Data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/text/Input_Data.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nsga_vrp/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nsga_vrp/utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parseText2Json.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sample_customized_data_25_copy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_distance.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Unit Test" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1hSjehVTAMDJWU3pAl5E1AtkXef" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="foldersAlwaysOnTop" value="false" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.maddyhome.idea.vim.ui.VimEmulationConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kp\Desktop\icav_vrp\data" />
+      <recent name="C:\Users\kp\Desktop\icav_vrp" />
+      <recent name="C:\Users\kp\Desktop\icav_vrp\tests" />
+      <recent name="C:\Users\kp\Desktop\icav_vrp\nsga_vrp" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="" />
+      <created>1600011485342</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600011485342</updated>
+      <workItem from="1600011491484" duration="124000" />
+      <workItem from="1600011618892" duration="282000" />
+      <workItem from="1600011992517" duration="7323000" />
+      <workItem from="1600063314787" duration="5590000" />
+      <workItem from="1600096291645" duration="269000" />
+      <workItem from="1600096718117" duration="2141000" />
+      <workItem from="1600098870281" duration="70000" />
+      <workItem from="1600098949361" duration="4741000" />
+      <workItem from="1600149568407" duration="2495000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1032" y="182" key="#Vim_Emulation" timestamp="1600098350586">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1032" y="182" key="#Vim_Emulation/0.0.1920.1040@0.0.1920.1040" timestamp="1600098350586" />
+    <state x="1203" y="342" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600013305301">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1203" y="342" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1600013305301" />
+    <state x="1170" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1600098536210">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1170" y="271" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1600098536210" />
+    <state x="1289" y="108" key="FileChooserDialogImpl" timestamp="1600012777183">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1289" y="108" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1600012777183" />
+    <state x="463" y="166" key="SettingsEditor" timestamp="1600098978687">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="463" y="166" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1600098978687" />
+    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600013352767">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1600013352767" />
+  </component>
+</project>
