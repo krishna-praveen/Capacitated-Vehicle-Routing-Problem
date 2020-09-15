@@ -157,7 +157,7 @@ def eval_indvidual_fitness(individual, instance, unit_cost):
 
 def testcosts():
     # Sample instance
-    test_instance = load_instance('./data/json_customize/Input_Data.json')
+    test_instance = load_instance('./data/json/Input_Data.json')
 
     # Sample individual
     sample_individual = [19, 5, 24, 7, 16, 23, 22, 2, 12, 8, 20, 25, 21, 18,11,15, 1, 14, 17, 6, 4, 13, 10, 3, 9]
@@ -254,17 +254,23 @@ def cxOrderedVrp(input_ind1, input_ind2):
 def testcrossover():
     ind1 = [3,2,5,1,6,9,8,7,4]
     ind2 = [7,3,6,1,9,2,4,5,8]
+    anotherind1 = [16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 21, 22, 23, 25, 24, 20]
+    anotherind2 = [21, 22, 23, 25,16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 24, 20]
+
 
     newind7, newind8 = cxOrderedVrp(ind1, ind2)
+    newind9, newind10 = cxOrderedVrp(anotherind1, anotherind2)
 
     print(f"InpInd1 is {ind1}")
     print(f"InpInd2 is {ind2}")
     # print(f"New_ind is {[x-1 for x in ind1]}")
     print(f"newind7 is {newind7}")
     print(f"newind8 is {newind8}")
+    print(f"newind9 is {newind9}")
+    print(f"newind10 is {newind10}")
 
 
-# testcrossover()
+testcrossover()
 
 
 def mutationShuffle(individual, indpb):
@@ -359,11 +365,11 @@ def nsga2vrp():
     # Setting variables
     pop_size = 400
     # Crossover probability
-    cross_prob = 0.8
+    cross_prob = 0.2
     # Mutation probability
     mut_prob = 0.02
     # Number of generations to run
-    num_gen = 3
+    num_gen = 220
 
     # Developing Deap algorithm from base problem    
     creator.create('FitnessMin', base.Fitness, weights=(-1.0, -1.0))
@@ -440,7 +446,7 @@ def nsga2vrp():
     #     print(f"Crowd distance is {i.fitness.crowding_dist}")
 
     # After generating population and assiging fitness to them
-    # Checking logs
+    # Recording Logs and Stats
     print("Recording the Data and Statistics")
     recordStat(invalid_ind, logbook, pop, stats,gen=0)
 
@@ -449,6 +455,7 @@ def nsga2vrp():
         print(f"######## Currently Evaluating {gen} Generation ######## ")
 
         # Selecting individuals
+        # Selecting offsprings from the population, about 1/2 of them
         offspring = tools.selTournamentDCD(pop, len(pop))
         offspring = [toolbox.clone(ind) for ind in offspring]
 
@@ -510,119 +517,5 @@ def nsga2vrp():
     exportCsv(csv_file_name, logbook)
 
 
-
-
-
 nsga2vrp()
-
-
-
-def run_gavrptw(instance_name, unit_cost, init_cost, wait_cost, delay_cost, ind_size, pop_size, \
-    cx_pb, mut_pb, n_gen, export_csv=False, customize_data=False):
-    '''gavrptw.core.run_gavrptw(instance_name, unit_cost, init_cost, wait_cost, delay_cost,
-        ind_size, pop_size, cx_pb, mut_pb, n_gen, export_csv=False, customize_data=False)'''
-    if customize_data:
-        json_data_dir = os.path.join(BASE_DIR, 'data', 'json_customize')
-    else:
-        json_data_dir = os.path.join(BASE_DIR, 'data', 'json')
-    json_file = os.path.join(json_data_dir, f'{instance_name}.json')
-    instance = load_instance(json_file=json_file)
-    if instance is None:
-        return
-    creator.create('FitnessMax', base.Fitness, weights=(1.0, ))
-    creator.create('Individual', list, fitness=creator.FitnessMax)
-    toolbox = base.Toolbox()
-    # Attribute generator
-    toolbox.register('indexes', random.sample, range(1, ind_size + 1), ind_size)
-    # Structure initializers
-    toolbox.register('individual', tools.initIterate, creator.Individual, toolbox.indexes)
-    toolbox.register('population', tools.initRepeat, list, toolbox.individual)
-    # Operator registering
-    toolbox.register('evaluate', eval_vrptw, instance=instance, unit_cost=unit_cost, \
-        init_cost=init_cost, wait_cost=wait_cost, delay_cost=delay_cost)
-    toolbox.register('select', tools.selRoulette)
-    toolbox.register('mate', cx_partialy_matched)
-    toolbox.register('mutate', mut_inverse_indexes)
-    pop = toolbox.population(n=pop_size)
-    # Results holders for exporting results to CSV file
-    csv_data = []
-    print('Start of evolution')
-    # Evaluate the entire population
-    fitnesses = list(map(toolbox.evaluate, pop))
-    for ind, fit in zip(pop, fitnesses):
-        ind.fitness.values = fit
-    print(f'  Evaluated {len(pop)} individuals')
-    # Begin the evolution
-    for gen in range(n_gen):
-        print(f'-- Generation {gen} --')
-        # Select the next generation individuals
-        offspring = toolbox.select(pop, len(pop))
-        # Clone the selected individuals
-        offspring = list(map(toolbox.clone, offspring))
-        # Apply crossover and mutation on the offspring
-        for child1, child2 in zip(offspring[::2], offspring[1::2]):
-            if random.random() < cx_pb:
-                toolbox.mate(child1, child2)
-                del child1.fitness.values
-                del child2.fitness.values
-        for mutant in offspring:
-            if random.random() < mut_pb:
-                toolbox.mutate(mutant)
-                del mutant.fitness.values
-        # Evaluate the individuals with an invalid fitness
-        invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-        fitnesses = map(toolbox.evaluate, invalid_ind)
-        for ind, fit in zip(invalid_ind, fitnesses):
-            ind.fitness.values = fit
-        print(f'  Evaluated {len(invalid_ind)} individuals')
-        # The population is entirely replaced by the offspring
-        pop[:] = offspring
-        # Gather all the fitnesses in one list and print the stats
-        fits = [ind.fitness.values[0] for ind in pop]
-        length = len(pop)
-        mean = sum(fits) / length
-        sum2 = sum([x**2 for x in fits])
-        std = abs(sum2 / length - mean**2)**0.5
-        print(f'  Min {min(fits)}')
-        print(f'  Max {max(fits)}')
-        print(f'  Avg {mean}')
-        print(f'  Std {std}')
-        # Write data to holders for exporting results to CSV file
-        if export_csv:
-            csv_row = {
-                'generation': gen,
-                'evaluated_individuals': len(invalid_ind),
-                'min_fitness': min(fits),
-                'max_fitness': max(fits),
-                'avg_fitness': mean,
-                'std_fitness': std,
-            }
-            csv_data.append(csv_row)
-    print('-- End of (successful) evolution --')
-    best_ind = tools.selBest(pop, 1)[0]
-    print(f'Best individual: {best_ind}')
-    print(f'Fitness: {best_ind.fitness.values[0]}')
-    printRoute(routeToSubroute(best_ind, instance))
-    print(f'Total cost: {1 / best_ind.fitness.values[0]}')
-    if export_csv:
-        csv_file_name = f'{instance_name}_uC{unit_cost}_iC{init_cost}_wC{wait_cost}' \
-            f'_dC{delay_cost}_iS{ind_size}_pS{pop_size}_cP{cx_pb}_mP{mut_pb}_nG{n_gen}.csv'
-        csv_file = os.path.join(BASE_DIR, 'results', csv_file_name)
-        print(f'Write to file: {csv_file}')
-        make_dirs_for_file(path=csv_file)
-        if not exist(path=csv_file, overwrite=True):
-            with io.open(csv_file, 'wt', newline='') as file_object:
-                fieldnames = [
-                    'generation',
-                    'evaluated_individuals',
-                    'min_fitness',
-                    'max_fitness',
-                    'avg_fitness',
-                    'std_fitness',
-                ]
-                writer = DictWriter(file_object, fieldnames=fieldnames, dialect='excel')
-                writer.writeheader()
-                for csv_row in csv_data:
-                    writer.writerow(csv_row)
-
 

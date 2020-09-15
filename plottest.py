@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 
 
-def plotTest():
-
-
 
 
 def plotTSP(path, points, num_iters=1):

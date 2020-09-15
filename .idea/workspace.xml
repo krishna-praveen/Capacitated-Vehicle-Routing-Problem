@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/plottest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop4000_crossProb0.8_mutProb0.02_numGen180.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen150.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen300.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen400.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_algo_methods.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_route.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plottest.py" beforeDir="false" afterPath="$PROJECT_DIR$/plottest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +32,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1hSjehVTAMDJWU3pAl5E1AtkXef" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="foldersAlwaysOnTop" value="false" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -32,6 +42,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -63,12 +74,15 @@
       <workItem from="1600096718117" duration="2141000" />
       <workItem from="1600098870281" duration="70000" />
       <workItem from="1600098949361" duration="4741000" />
-      <workItem from="1600149568407" duration="14146000" />
+      <workItem from="1600149568407" duration="19717000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1032" y="182" key="#Vim_Emulation" timestamp="1600165307332">
