@@ -5,6 +5,7 @@ import random
 import numpy
 import fnmatch
 import csv
+import array
 
 from csv import DictWriter
 from json import load, dump
@@ -155,56 +156,6 @@ def eval_indvidual_fitness(individual, instance, unit_cost):
 
 
 
-def testcosts():
-    # Sample instance
-    test_instance = load_instance('./data/json/Input_Data.json')
-
-    # Sample individual
-    sample_individual = [19, 5, 24, 7, 16, 23, 22, 2, 12, 8, 20, 25, 21, 18,11,15, 1, 14, 17, 6, 4, 13, 10, 3, 9]
-
-    # Sample individual 2
-    sample_ind_2 = random.sample(sample_individual, len(sample_individual))
-    print(f"Sample individual is {sample_individual}")
-    print(f"Sample individual 2 is {sample_ind_2}")
-
-    # Cost for each route
-    print(f"Sample individual cost is {getRouteCost(sample_individual, test_instance, 1)}")
-    print(f"Sample individual 2 cost is {getRouteCost(sample_ind_2, test_instance, 1)}")
-
-    # Fitness for each route
-    print(f"Sample individual fitness is {eval_indvidual_fitness(sample_individual, test_instance, 1)}")
-    print(f"Sample individual 2 fitness is {eval_indvidual_fitness(sample_ind_2, test_instance, 1)}")
-
-# testcosts()
-
-def testroutes():
-    # Sample instance
-    test_instance = load_instance('./data/json/Input_Data.json')
-
-    # Sample individual
-    sample_individual = [19, 5, 24, 7, 16, 23, 22, 2, 12, 8, 20, 25, 21, 18,11,15, 1, 14, 17, 6, 4, 13, 10, 3, 9]
-    best_ind_300_gen = [16, 14, 12, 10, 15, 17, 21, 23, 11, 9, 8, 20, 18, 19, 13, 22, 25, 24, 5, 3, 4, 6, 7, 1, 2]
-
-
-    # Sample individual 2
-    sample_ind_2 = random.sample(sample_individual, len(sample_individual))
-    print(f"Sample individual is {sample_individual}")
-    print(f"Sample individual 2 is {sample_ind_2}")
-    print(f"Best individual 300 generations is {best_ind_300_gen}")
-
-    # Getting routes
-    print(f"Subroutes for first sample individual is {routeToSubroute(sample_individual, test_instance)}")
-    print(f"Subroutes for second sample indivudal is {routeToSubroute(sample_ind_2, test_instance)}")
-    print(f"Subroutes for best sample indivudal is {routeToSubroute(best_ind_300_gen, test_instance)}")
-
-    # Getting num of vehicles
-    print(f"Vehicles for sample individual {getNumVehiclesRequired(sample_individual, test_instance)}")
-    print(f"Vehicles for second sample individual {getNumVehiclesRequired(sample_ind_2, test_instance)}")
-    print(f"Vehicles for best sample individual {getNumVehiclesRequired(best_ind_300_gen, test_instance)}")
-
-# testroutes()
-
-
 # Crossover method with ordering
 # This method will let us escape illegal routes with multiple occurences
 #   of customers that might happen. We would never get illegal individual from this
@@ -251,28 +202,6 @@ def cxOrderedVrp(input_ind1, input_ind2):
     return ind1, ind2
 
 
-def testcrossover():
-    ind1 = [3,2,5,1,6,9,8,7,4]
-    ind2 = [7,3,6,1,9,2,4,5,8]
-    anotherind1 = [16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 21, 22, 23, 25, 24, 20]
-    anotherind2 = [21, 22, 23, 25,16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 24, 20]
-
-
-    newind7, newind8 = cxOrderedVrp(ind1, ind2)
-    newind9, newind10 = cxOrderedVrp(anotherind1, anotherind2)
-
-    print(f"InpInd1 is {ind1}")
-    print(f"InpInd2 is {ind2}")
-    # print(f"New_ind is {[x-1 for x in ind1]}")
-    print(f"newind7 is {newind7}")
-    print(f"newind8 is {newind8}")
-    print(f"newind9 is {newind9}")
-    print(f"newind10 is {newind10}")
-
-
-testcrossover()
-
-
 def mutationShuffle(individual, indpb):
     """
     Inputs : Individual route
@@ -290,15 +219,7 @@ def mutationShuffle(individual, indpb):
 
     return individual,
 
-def testmutation():
-    ind1 = [3,2,5,1,6,9,8,7,4]
-    mut1 = mutationShuffle(ind1)
 
-    print(f"Given individual is {ind1}")
-    print(f"Mutation from first method {mut1}")
-
-
-# testmutation()
 
 ## Statistics and Logging
 
@@ -336,7 +257,9 @@ def recordStat(invalid_ind, logbook, pop, stats, gen):
     print(logbook.stream)
 
 
+
 ## Exporting CSV files
+
 def exportCsv(csv_file_name, logbook):
     csv_columns = logbook[0].keys()
     csv_path = os.path.join(BASE_DIR, "results", csv_file_name)
@@ -350,8 +273,72 @@ def exportCsv(csv_file_name, logbook):
         print("I/O error")
 
 
+def simpleGA():
 
+    def costFunc(individual):
+        cost = getRouteCost(individual, json_instance, unit_cost=1)
+        return cost,
 
+    def cxPartialyMatchedNew(ind1, ind2):
+        ind1 = [x - 1 for x in ind1]
+        ind2 = [x - 1 for x in ind2]
+        size = min(len(ind1), len(ind2))
+        p1, p2 = [0] * size, [0] * size
+
+        # Initialize the position of each indices in the individuals
+        for i in range(size):
+            p1[ind1[i]] = i
+            p2[ind2[i]] = i
+        # Choose crossover points
+        cxpoint1 = random.randint(0, size)
+        cxpoint2 = random.randint(0, size - 1)
+        if cxpoint2 >= cxpoint1:
+            cxpoint2 += 1
+        else:  # Swap the two cx points
+            cxpoint1, cxpoint2 = cxpoint2, cxpoint1
+
+        # Apply crossover between cx points
+        for i in range(cxpoint1, cxpoint2):
+            # Keep track of the selected values
+            temp1 = ind1[i]
+            temp2 = ind2[i]
+            # Swap the matched value
+            ind1[i], ind1[p1[temp2]] = temp2, temp1
+            ind2[i], ind2[p2[temp1]] = temp1, temp2
+            # Position bookkeeping
+            p1[temp1], p1[temp2] = p1[temp2], p1[temp1]
+            p2[temp1], p2[temp2] = p2[temp2], p2[temp1]
+
+        return ind1, ind2
+
+    json_instance = load_instance('./data/json/Input_Data.json')
+    ind_size = json_instance["Number_of_customers"]
+    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+    creator.create("Individual", list,fitness=creator.FitnessMin)
+    toolbox = base.Toolbox()
+    toolbox.register("indices", random.sample, range(1, ind_size + 1), ind_size)
+
+    # Structure initializers
+    toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
+    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+    toolbox.register("mate", cxPartialyMatchedNew)
+    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
+    toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox.register("evaluate", costFunc)
+    random.seed(169)
+    pop = toolbox.population(n=300)
+    print(f"Pop1 is {pop[0]}")
+    hof = tools.HallOfFame(1)
+    stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats.register("avg", numpy.mean)
+    stats.register("std", numpy.std)
+    stats.register("min", numpy.min)
+    stats.register("max", numpy.max)
+
+    algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 40, stats=stats,
+                        halloffame=hof)
+
+    return pop, stats, hof
 
 
 def nsga2vrp():
@@ -517,5 +504,78 @@ def nsga2vrp():
     exportCsv(csv_file_name, logbook)
 
 
-nsga2vrp()
+if __name__ == "__main__":
+    print("Running file directly, Executing nsga2vrp")
+    nsga2vrp()
 
+# nsga2vrp()
+
+def testcosts():
+    # Sample instance
+    test_instance = load_instance('./data/json/Input_Data.json')
+
+    # Sample individual
+    sample_individual = [19, 5, 24, 7, 16, 23, 22, 2, 12, 8, 20, 25, 21, 18,11,15, 1, 14, 17, 6, 4, 13, 10, 3, 9]
+
+    # Sample individual 2
+    sample_ind_2 = random.sample(sample_individual, len(sample_individual))
+    print(f"Sample individual is {sample_individual}")
+    print(f"Sample individual 2 is {sample_ind_2}")
+
+    # Cost for each route
+    print(f"Sample individual cost is {getRouteCost(sample_individual, test_instance, 1)}")
+    print(f"Sample individual 2 cost is {getRouteCost(sample_ind_2, test_instance, 1)}")
+
+    # Fitness for each route
+    print(f"Sample individual fitness is {eval_indvidual_fitness(sample_individual, test_instance, 1)}")
+    print(f"Sample individual 2 fitness is {eval_indvidual_fitness(sample_ind_2, test_instance, 1)}")
+
+def testroutes():
+    # Sample instance
+    test_instance = load_instance('./data/json/Input_Data.json')
+
+    # Sample individual
+    sample_individual = [19, 5, 24, 7, 16, 23, 22, 2, 12, 8, 20, 25, 21, 18,11,15, 1, 14, 17, 6, 4, 13, 10, 3, 9]
+    best_ind_300_gen = [16, 14, 12, 10, 15, 17, 21, 23, 11, 9, 8, 20, 18, 19, 13, 22, 25, 24, 5, 3, 4, 6, 7, 1, 2]
+
+
+    # Sample individual 2
+    sample_ind_2 = random.sample(sample_individual, len(sample_individual))
+    print(f"Sample individual is {sample_individual}")
+    print(f"Sample individual 2 is {sample_ind_2}")
+    print(f"Best individual 300 generations is {best_ind_300_gen}")
+
+    # Getting routes
+    print(f"Subroutes for first sample individual is {routeToSubroute(sample_individual, test_instance)}")
+    print(f"Subroutes for second sample indivudal is {routeToSubroute(sample_ind_2, test_instance)}")
+    print(f"Subroutes for best sample indivudal is {routeToSubroute(best_ind_300_gen, test_instance)}")
+
+    # Getting num of vehicles
+    print(f"Vehicles for sample individual {getNumVehiclesRequired(sample_individual, test_instance)}")
+    print(f"Vehicles for second sample individual {getNumVehiclesRequired(sample_ind_2, test_instance)}")
+    print(f"Vehicles for best sample individual {getNumVehiclesRequired(best_ind_300_gen, test_instance)}")
+
+def testcrossover():
+    ind1 = [3,2,5,1,6,9,8,7,4]
+    ind2 = [7,3,6,1,9,2,4,5,8]
+    anotherind1 = [16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 21, 22, 23, 25, 24, 20]
+    anotherind2 = [21, 22, 23, 25,16, 14, 12, 7, 4, 2, 1, 13, 15, 8, 9, 6, 3, 5, 17, 18, 19, 11, 10, 24, 20]
+
+
+    newind7, newind8 = cxOrderedVrp(ind1, ind2)
+    newind9, newind10 = cxOrderedVrp(anotherind1, anotherind2)
+
+    print(f"InpInd1 is {ind1}")
+    print(f"InpInd2 is {ind2}")
+    # print(f"New_ind is {[x-1 for x in ind1]}")
+    print(f"newind7 is {newind7}")
+    print(f"newind8 is {newind8}")
+    print(f"newind9 is {newind9}")
+    print(f"newind10 is {newind10}")
+
+def testmutation():
+    ind1 = [3,2,5,1,6,9,8,7,4]
+    mut1 = mutationShuffle(ind1)
+
+    print(f"Given individual is {ind1}")
+    print(f"Mutation from first method {mut1}")

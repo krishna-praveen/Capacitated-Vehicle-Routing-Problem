@@ -10,33 +10,28 @@ Multiobjective python implementation of capacitated vehicle routing
 - [Installation](#installation)
     - [Requirements](#requirements)
     - [Installing with Virtualenv](#installing-with-virtualenv)
-- [Quick Start](#quick-start)
 - [Problem Statement](#problem-statement)
+- [Parsing Input](#parsing-input)
     - [Text File Format](#text-file-format)
     - [JSON Format](#json-format)
     - [Convert `*.txt` to `*.json`](#convert-txt-to-json)
+- [Algorithm Selection](#algoritm-selection)
+- [Assumptions](#assumptions)
 - [NSGA-II Implementation](#nsga-ii-implementation)
     - [Individual (Chromosome)](#individual-chromosome)
         - [Individual Coding](#individual-coding)
         - [Individual Decoding](#individual-decoding)
         - [Print Route](#print-route)
-    - [Evaluation](#evaluation)
-    - [Selection: Roulette Wheel Selection](#selection-roulette-wheel-selection)
-    - [Crossover: Partially Matched Crossover](#crossover-partially-matched-crossover)
+    - [Fitness evaluation](#fitness-evaluation)
+    - [Selection: Non dominated sorting selection](#selection-non-dominated-sorting-selection)
+    - [Crossover: Ordered Crossover](#crossover-ordered-crossover)
     - [Mutation: Inverse Operation](#mutation-inverse-operation)
     - [Algorithm](#algorithm)
-    - [Sample Codes](#sample-codes)
-        - [Instance: R101](#instance-r101)
-        - [Instance: C204](#instance-c204)
-        - [Customized Instance](#customized-instance)
-        - [View Logs](#view-logs)
-- [API Reference](#api-reference)
-    - [Module: `gavrptw`](#module-gavrptw)
-    - [Module: `gavrptw.core`](#module-gavrptwcore)
-    - [Module: `gavrptw.utils`](#module-gavrptwutils)
+- [Running Tests](#running-tests)
+- [Visualizations](#visualizations)
 - [File Structure](#file-structure)
-- [Further Reading](#further-reading)
-- [References](#references)
+- [Framework Documentation](#framework-documentation)
+- [Future Improvements](#future-improvements)
 - [License](#license)
 
 
@@ -68,6 +63,10 @@ minimized. In addition, the capacity of each vehicle should not be exceeded (con
 **Notes**
 1. For each client we have we only need to consider first four fields. They are `id, xcoord, ycoord, demand`
 2. Distance between each client can be calculated using `Euclidian formula`
+
+
+
+## Parsing Input
 
 ### Text File Format
 The text files for this problem which are inputs provided can be found in the 
@@ -168,6 +167,39 @@ Run the `parseText2Json.py` to convert `*.txt` file to `*.json` file.
 ```sh
 python parseText2Json.py
 ```
+## Algorithm Selection
+Multiobjective optimization of travelling salesman is a NP-hard problem.
+So simple Genetic algorithm cannot compute good solutions when there are
+multiple objectives. We need a non dominated sorting approach where only
+non dominated inviduals are selected. Another way of formulating this problem is to 
+use genetic algorithm but combining both objectives into a single one.
+
+Here our objective is 
+```
+Minimize -> Number of vehicles
+Minimize -> Distance travelled by all vehicles
+```
+
+This can be formulated in another way like this
+```
+Minimize -> (Number of vehicles) * (Distance travelled by all vehicles)
+
+---- or -----
+
+Maximize -> 1/ (Num of vehicles) *(Distance by all )
+```
+
+## Assumptions
+We are assuming the following things.
+
+1. There is no time delay and no time windows for our vehicle at the objective locations
+2. Fixed cost for extra vehicle is assumed to be 0.
+3. Due date, service time , ready time are Ignored
+4. Distance between client to client is assumed to be Euclidean.
+5. Vehicle always starts from the depot `customer_0` and delivers goods 
+and then comes back to depot again after delivery
+6. 
+
 
 ## NSGA-II Implementation
 
@@ -194,7 +226,7 @@ is equivalent to number of vechicles.
 ```python
 routeToSubroute(individual, instance)
 ```
-decodes `individual` to `route`. Refer the below example
+Decodes an `individual` to `route`. Refer the below example
 
 ```python
 # Individual
@@ -203,6 +235,64 @@ decodes `individual` to `route`. Refer the below example
 # Route
 [[12, 14, 16], [8, 9, 11, 21, 20], [5, 3, 4, 6, 10], [7, 2, 1], [22, 25, 24], [23, 18, 19, 17], [15, 13]]
 ```
+
+### Fitness Evaluation
+Since our problem is Multiobjective , we need to calculated two objectives here
+One is `Number of vehicles` and `Total Distance Travelled`
+
+So we divided the objectives, calculate them and return a `tuple`
+
+First objective is calculated using `getNumVehiclesRequired` function
+which just finds number of elements in list after the `Indiviudal` is 
+passed in to `routeToSubroute`
+
+Second objective is caclulated using `getRouteCost`.
+After dividing an individual in to sub routes, For each subroute distance
+is calculated between indiviudals and added. Final Route cost will be
+addition of all these sub routes cost
+
+```python
+eval_indvidual_fitness(individual, instance, unit_cost)
+```
+This function returns a tuple of `(Num of vehicles, Route Cost)`
+We have to minimize both the objectives at same time.
+So when we create our individual using [deap]() package, we have to specify the
+individual in following way - 
+
+```python
+creator.create('FitnessMin', base.Fitness, weights=(-1.0, -1.0))
+```
+
+Assigning weights (-1.0, -1.0) is crucial step when defining objective.
+
+### Selection: Non dominated sorting selection
+
+### Crossover: Ordered Crossover
+
+### Mutation: Inverse Operation
+
+### Algorithm
+
+
+## Running Tests
+We used python inbuilt `unittest` module to run all the tests
+To run all the tests do the following
+
+```sh
+python -m unittest discover test
+```
+This command will discover all the tests in the test folder and runs them all.
+
+
+## Visualizations
+
+## File Structure
+
+## Framework Documentation
+
+## Future Improvements
+
+## License
 
 
 

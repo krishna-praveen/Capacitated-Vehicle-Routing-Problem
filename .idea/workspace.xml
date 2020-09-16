@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_route.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +66,8 @@
       <workItem from="1600096718117" duration="2141000" />
       <workItem from="1600098870281" duration="70000" />
       <workItem from="1600098949361" duration="4741000" />
-      <workItem from="1600149568407" duration="20716000" />
+      <workItem from="1600149568407" duration="20784000" />
+      <workItem from="1600236025178" duration="13861000" />
     </task>
     <servers />
   </component>
@@ -96,9 +98,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="463" y="166" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1600098978687" />
-    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600013352767">
+    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1600240896091">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1600013352767" />
+    <state x="1109" y="215" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1600240896091" />
   </component>
 </project>
