@@ -21,7 +21,6 @@ Multiobjective python implementation of capacitated vehicle routing
     - [Individual (Chromosome)](#individual-chromosome)
         - [Individual Coding](#individual-coding)
         - [Individual Decoding](#individual-decoding)
-        - [Print Route](#print-route)
     - [Fitness evaluation](#fitness-evaluation)
     - [Selection: Non dominated sorting selection](#selection-non-dominated-sorting-selection)
     - [Crossover: Ordered Crossover](#crossover-ordered-crossover)
