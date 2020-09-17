@@ -26,7 +26,7 @@ Multiobjective python implementation of capacitated vehicle routing
     - [Selection: Non dominated sorting selection](#selection-non-dominated-sorting-selection)
     - [Crossover: Ordered Crossover](#crossover-ordered-crossover)
     - [Mutation: Inverse Operation](#mutation-inverse-operation)
-    - [Algorithm](#algorithm)
+
 - [Running Tests](#running-tests)
 - [Visualizations](#visualizations)
 - [File Structure](#file-structure)
@@ -267,12 +267,140 @@ Assigning weights (-1.0, -1.0) is crucial step when defining objective.
 
 ### Selection: Non dominated sorting selection
 
+Apply NSGA-II selection operator on the *individuals*. Usually, the
+size of *individuals* will be larger than *k* because any individual
+present in *individuals* will appear in the returned list at most once.
+Having the size of *individuals* equals to *k* will have no effect other
+than sorting the population according to their front rank. The
+list returned contains references to the input *individuals*. For more
+details on the NSGA-II operator see [Deb2002](https://www.iitk.ac.in/kangal/Deb_NSGA-II.pdf).
+
+From a group of individuals, it selects `k` number of inviduals for next
+generation. First, all the individuals are assigned crowding distance.
+
+The algorithm works as follows -
+
+1. First parent `Pt` and offspring population `Qt` are combined to form `Rt`
+2. Fast non dominated sorting is performed over combined population, to find Pareto Fronts
+3. Now next generation parent Population say Pt+1 is to be filled
+    - Assign crowding distance in Each pareto front
+    - If population length doesn't exceed initial parent population, add this population
+      to `Pt+1`, Repeat this process until this condition is overridden
+4. Now we are in say some Pareto front `Fi` and we have to add `N-Pt+1` population
+    - Sort all individuals in `Fi` using `<` **crowded** operator
+    - Keep adding new population until it doesn't reach `N`
+5. Now `N` individuals are selected for next generation
+6. Perform `Crossover` and `Mutation` operations over these population
+7. This new population is `Qt+1` , aka., `offspring`
+8. Repeat 1-7 until all generations are complete.
+
+```python
+selNSGA2(individuals, k, nd='standard')
+```
+
 ### Crossover: Ordered Crossover
+Ordered crossover will never give us invalid and infeasible
+individuals or routes which have same customer multiple times. This helps
+us in computing fitness values without rechecking if an individual is valid or not.
+
+Executes an ordered crossover (OX) on the input
+individuals. The two individuals are modified in place. This crossover
+expects :term:`sequence` individuals of indices, the result for any other
+type of individuals is unpredictable.
+
+Moreover, this crossover generates holes in the input
+individuals. A hole is created when an attribute of an individual is
+between the two crossover points of the other individual. Then it rotates
+the element so that all holes are between the crossover points and fills
+them with the removed elements in order. For more details see
+[Goldberg1989]
+
+```python
+cxOrdered(ind1, ind2)
+```
+
+Ordered CrossOver works as follows - 
+Lets say we have two routes `A` and `B` as follows
+
+```
+A = 9 8 4 5 6 7 1 3 2 10
+B = 8 7 1 2 3 10 9 5 4 6
+```
+Here we select two random positions in `A` and `B`
+say we select  3 and 6
+
+```
+A = 9 8 4 | 5 6 7 | 1 3 2 10
+B = 8 7 1 | 2 3 10 | 9 5 4 6
+```
+
+Now , ordered crossover uses sliding motion to left to fill the holes
+by transferring mapped positions. For example, when string `B` maps to string `A`,
+the cities 5, 6, 7 will leave hoes in string `B`
+
+```
+B = 8 H 1 | 2 3 10 | 9 H 4 H
+```
+Now these holes are filled with a sliding motion towards left.
+To understand this in better way imagine that holes `H` are rocks and
+middle portion in between | | is a pond, rest numbers will flot but only in the
+first and last regions. Say that if hole `H` comes in pond it is stuck there and cant get out.
+So , we start moving entire thing slowly left, 
+
+```
+After 1 digit displacement towards left
+B = H 1 2 | 3 10 9 | H 4 H 8
+
+After another digit displacement
+B = 1 2 3 | 10 9 H | 4 H 8 H
+
+After another digit displacement
+B = 2 3 10 | 9 H 4 | H 8 H 1
+
+Remember that H cannot escape in between | |
+```
+
+After full sliding motion and filling portion in between | |
+we have the following `B`
+
+```
+B = 2 3 10 | H H H | 9 4 8 1
+```
+
+Similarily repeating this process for A will result
+
+```
+A = 5 6 7 | H H H | 1 9 8 4
+```
+
+Now we just have to swap middle portions that are cut in first place and we have
+two new individuals. They will be - 
+
+```
+A_new = 5 6 7 | 2 3 10 | 1 9 8 4
+B_new = 2 3 10| 5 6 7 | 9 4 8 1
+```
+
+Ultimately we swapped `5, 6, 7 ` cities from `A` and `2 3 10`
+cities from `B` to each other , but no repeatation of cities in both
+`A_new` and `B_new`
+
 
 ### Mutation: Inverse Operation
+Inverses the cities between two random points of input individual and returns
+new one. The mutation is controlled by mutation probability and is executed over all the
+offspring population. 
 
-### Algorithm
+```
+A = 5 6 7 2 3 10 1 9 8 4
+```
+Say our mutation probability is `0.02` and randomly we selected 
+position `4` and `8`
 
+So our new individual will be
+```
+A = 5 6 7 9 3 10 1 2 8 4
+```
 
 ## Running Tests
 We used python inbuilt `unittest` module to run all the tests
@@ -285,14 +413,75 @@ This command will discover all the tests in the test folder and runs them all.
 
 
 ## Visualizations
+![image info](./figures/input_data_pop400_crossprob0.8_mutprob0.02_numgen150.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen300.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen400.png)
+![image info](./figures/Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.png)
+![image info](./figures/Input_Data_pop4000_crossProb0.8_mutProb0.02_numGen180.png)
+
+
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen150.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen300.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen400.png)
+![image info](./figures/Route_Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.png)
+![image info](./figures/Route_Input_Data_pop4000_crossProb0.8_mutProb0.02_numGen180.png)
+
 
 ## File Structure
+```
+├── data/
+│   ├── json/
+│   │   ├── <Instance name>.json
+│   │   └── ...
+│   ├── text/
+│   │   ├── <Instance name>.txt
+│   │   └── ...
+├── figures/
+│   ├── Input_Data_... .png
+│   └── ...
+├── plots/
+│   ├── __init__.py
+│   └── plotGenerations.py
+│   └── plotResults.py
+├── results/
+│   └── ...
+├── nsga_vrp/
+│   ├── __init__.py
+│   ├── NSGA2_vrp.py
+│   └── utils.py
+├── test/
+│   ├── __init__.py
+│   ├── test_distance.py
+│   └── test_route.py
+├── parseText2Json.py
+├── plotAllResults.py
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
+```
 
 ## Framework Documentation
+**Distributed Evolutionary Algorithms in Python**
+
+- [DEAP github](https://github.com/DEAP/deap)
+- [DEAP documentation](http://deap.readthedocs.org/)
+
 
 ## Future Improvements
+1. Adding Input file selection to run a problem on
+2. Test cases for mutation , crossover and selection
+3. Web based interface to Input data and see the graphs and Optimal route
+4. Comparison of frameworks and hyperparameter optimization
 
 ## License
+MIT License
 
 
 

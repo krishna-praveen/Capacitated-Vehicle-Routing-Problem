@@ -8,8 +8,20 @@ import glob
 from nsga_vrp.NSGA2_vrp import load_instance, routeToSubroute, eval_indvidual_fitness
 
 
+def loadResultPaths():
+    allpaths = glob.glob("./results/*.csv")
+    allpaths = [i.replace("\\","/") for i in allpaths]
+    csv_files = [eachpath.split("/")[-1] for eachpath in allpaths]
+    return allpaths, csv_files
+
+
+def loadCsv(csv_file_path):
+    instance = pd.read_csv(csv_file_path)
+    return instance
+
+
 def cleanResult(csv_file_path):
-    loaded_result = pd.read_csv(csv_file_path)
+    loaded_result = loadCsv(csv_file_path)
     min_column = loaded_result['min']
     gen_column = loaded_result['Generation']
 
@@ -32,17 +44,13 @@ def plotFitnessFromCSV(csv_file_path):
     plt.xlabel("Generations")
     plt.ylabel("Min distance")
     plt.title(csv_title)
-    plt.savefig(f"./figures/{csv_title}.png")
+    plt.savefig(f"./figures/Fitness_{csv_title}.png")
     # plt.show()
 
 
 
 def createAllFitnessPlots():
-    allpaths = glob.glob("./results/*.csv")
-    allpaths = [i.replace("\\","/") for i in allpaths]
-    csv_files = [eachpath.split("/")[-1] for eachpath in allpaths]
-    print(allpaths)
-    print(csv_files)
+    allpaths, csv_files = loadResultPaths()
 
     # Plotting all
     for eachpath in allpaths:

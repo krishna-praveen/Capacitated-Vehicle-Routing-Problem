@@ -38,7 +38,7 @@ def plotSubroute(subroute, dfhere,color):
         totalSubroute.pop(0)
 
 
-def plotRoute(route):
+def plotRoute(route, csv_title):
     # Loading the instance
     json_instance = load_instance('./data/json/Input_Data.json')
 
@@ -65,10 +65,15 @@ def plotRoute(route):
         plotSubroute(route, dfhere, color=colorslist[colorindex])
         colorindex += 1
 
+    # Plotting is done, adding labels, Title
+    plt.xlabel("X - Coordinate")
+    plt.ylabel("Y - Coordinate")
+    plt.title(csv_title)
+    plt.savefig(f"./figures/Route_{csv_title}.png")
 
 if __name__ == "__main__":
     sample_route = [1, 2, 4, 25, 24, 22, 23, 17, 13, 10, 15, 19, 18, 12, 14, 16, 11, 9, 6, 8, 7, 3, 5, 21, 20]
-    plotRoute(sample_route)
+    plotRoute(sample_route,"Sample_Title")
     plt.show()
 
 
