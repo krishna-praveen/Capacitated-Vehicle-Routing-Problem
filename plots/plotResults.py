@@ -40,7 +40,7 @@ def plotSubroute(subroute, dfhere,color):
 
 def plotRoute(route):
     # Loading the instance
-    json_instance = load_instance('../data/json/Input_Data.json')
+    json_instance = load_instance('./data/json/Input_Data.json')
 
     subroutes = routeToSubroute(route, json_instance)
     colorslist = ["blue","green","red","cyan","magenta","yellow","black","#eeefff"]
