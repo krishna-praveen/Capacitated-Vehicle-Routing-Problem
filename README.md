@@ -29,6 +29,8 @@ Multiobjective python implementation of capacitated vehicle routing
 
 - [Running Tests](#running-tests)
 - [Visualizations](#visualizations)
+    - [Distance Travelled vs Generations](#distance-travelled-vs-generations)
+    - [Efficient vehicle routing in last generation](#efficient-vehicle-routing-in-last-generation)
 - [File Structure](#file-structure)
 - [Framework Documentation](#framework-documentation)
 - [Future Improvements](#future-improvements)
@@ -413,7 +415,14 @@ This command will discover all the tests in the test folder and runs them all.
 
 
 ## Visualizations
-![image info](./figures/input_data_pop400_crossprob0.8_mutprob0.02_numgen150.png)
+Plots are generated for Minimum fitness values for each combination of parameters with respect to 
+population generations.
+Vechicle routing plots are generated as well where each color represents a route taken by a vehicle.
+The final combination of routes is the best route that is generated at the end of generations for each
+combination of parameters
+
+### Distance Travelled vs Generations
+![image info](./figures/Input_data_pop400_crossprob0.8_mutprob0.02_numgen150.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.png)
@@ -422,7 +431,7 @@ This command will discover all the tests in the test folder and runs them all.
 ![image info](./figures/Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.png)
 ![image info](./figures/Input_Data_pop4000_crossProb0.8_mutProb0.02_numGen180.png)
 
-
+### Efficient vehicle routing in last generation
 ![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen150.png)
 ![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.png)
 ![image info](./figures/Route_Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.png)
