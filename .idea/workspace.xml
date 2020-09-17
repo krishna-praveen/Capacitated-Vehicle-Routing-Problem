@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/plotting/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plotting/plotResults.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_route.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_route.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +44,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kp\Desktop\icav_vrp\plotting" />
       <recent name="C:\Users\kp\Desktop\icav_vrp\data" />
       <recent name="C:\Users\kp\Desktop\icav_vrp" />
       <recent name="C:\Users\kp\Desktop\icav_vrp\tests" />
@@ -67,7 +70,9 @@
       <workItem from="1600098870281" duration="70000" />
       <workItem from="1600098949361" duration="4741000" />
       <workItem from="1600149568407" duration="20784000" />
-      <workItem from="1600236025178" duration="13861000" />
+      <workItem from="1600236025178" duration="14721000" />
+      <workItem from="1600274420138" duration="5545000" />
+      <workItem from="1600321407035" duration="9499000" />
     </task>
     <servers />
   </component>

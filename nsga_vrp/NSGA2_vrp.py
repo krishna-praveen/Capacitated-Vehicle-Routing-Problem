@@ -341,6 +341,124 @@ def simpleGA():
     return pop, stats, hof
 
 
+class nsgaTest(object):
+
+    def __init__(self):
+        self.json_instance = load_instance('./data/json/Input_Data.json')
+        self.ind_size = self.json_instance['Number_of_customers']
+        self.pop_size = 400
+        self.cross_prob = 0.85
+        self.mut_prob = 0.02
+        self.num_gen = 150
+        self.toolbox = base.Toolbox()
+        self.logbook, self.stats = createStatsObjs()
+        self.createCreators()
+
+    def createCreators(self):
+        creator.create('FitnessMin', base.Fitness, weights=(-1.0, -1.0))
+        creator.create('Individual', list, fitness=creator.FitnessMin)
+
+        # Registering toolbox
+        self.toolbox.register('indexes', random.sample, range(1, self.ind_size + 1), self.ind_size)
+
+        # Creating individual and population from that each individual
+        self.toolbox.register('individual', tools.initIterate, creator.Individual, self.toolbox.indexes)
+        self.toolbox.register('population', tools.initRepeat, list, self.toolbox.individual)
+
+        # Creating evaluate function using our custom fitness
+        #   toolbox.register is partial, *args and **kwargs can be given here
+        #   and the rest of args are supplied in code
+        self.toolbox.register('evaluate', eval_indvidual_fitness, instance=self.json_instance, unit_cost=1)
+
+        # Selection method
+        self.toolbox.register("select", tools.selNSGA2)
+
+        # Crossover method
+        self.toolbox.register("mate", cxOrderedVrp)
+
+        # Mutation method
+        self.toolbox.register("mutate", mutationShuffle, indpb=self.mut_prob)
+
+
+    def generatingPopFitness(self):
+        self.pop = self.toolbox.population(n=self.pop_size)
+        self.invalid_ind = [ind for ind in self.pop if not ind.fitness.valid]
+        self.fitnesses = list(map(self.toolbox.evaluate, self.invalid_ind))
+
+        for ind, fit in zip(self.invalid_ind, self.fitnesses):
+            ind.fitness.values = fit
+
+        self.pop = self.toolbox.select(self.pop, len(self.pop))
+
+        recordStat(self.invalid_ind, self.logbook, self.pop, self.stats, gen = 0)
+
+
+    def runGenerations(self):
+        # Running algorithm for given number of generations
+        for gen in range(self.num_gen):
+            print(f"{20*'#'} Currently Evaluating {gen} Generation {20*'#'}")
+
+            # Selecting individuals
+            # Selecting offsprings from the population, about 1/2 of them
+            self.offspring = tools.selTournamentDCD(self.pop, len(self.pop))
+            self.offspring = [self.toolbox.clone(ind) for ind in self.offspring]
+
+            # Performing , crossover and mutation operations according to their probabilities
+            for ind1, ind2 in zip(self.offspring[::2], self.offspring[1::2]):
+                # Mating will happen 80% of time if cross_prob is 0.8
+                if random.random() <= self.cross_prob:
+                    # print("Mating happened")
+                    self.toolbox.mate(ind1, ind2)
+
+                    # If cross over happened to the individuals then we are deleting those individual
+                    #   fitness values, This operations are being done on the offspring population.
+                    del ind1.fitness.values, ind2.fitness.values
+                self.toolbox.mutate(ind1)
+                self.toolbox.mutate(ind2)
+
+            # Calculating fitness for all the invalid individuals in offspring
+            self.invalid_ind = [ind for ind in self.offspring if not ind.fitness.valid]
+            self.fitnesses = self.toolbox.map(self.toolbox.evaluate, self.invalid_ind)
+            for ind, fit in zip(self.invalid_ind, self.fitnesses):
+                ind.fitness.values = fit
+
+            # Recalcuate the population with newly added offsprings and parents
+            # We are using NSGA2 selection method, We have to select same population size
+            self.pop = self.toolbox.select(self.pop + self.offspring, self.pop_size)
+
+            # Recording stats in this generation
+            recordStat(self.invalid_ind, self.logbook, self.pop, self.stats, gen + 1)
+
+        print(f"{20 * '#'} End of Generations {20 * '#'} ")
+
+
+    def getBestInd(self):
+        self.best_individual = tools.selBest(self.pop, 1)[0]
+
+        # Printing the best after all generations
+        print(f"Best individual is {self.best_individual}")
+        print(f"Number of vechicles required are "
+              f"{self.best_individual.fitness.values[0]}")
+        print(f"Cost required for the transportation is "
+              f"{self.best_individual.fitness.values[1]}")
+
+        # Printing the route from the best individual
+        printRoute(routeToSubroute(self.best_individual, self.json_instance))
+
+    def doExport(self):
+        csv_file_name = f"{self.json_instance['instance_name']}_" \
+                        f"pop{self.pop_size}_crossProb{self.cross_prob}" \
+                        f"_mutProb{self.mut_prob}_numGen{self.num_gen}.csv"
+        exportCsv(csv_file_name, self.logbook)
+
+    def runMain(self):
+        self.generatingPopFitness()
+        self.runGenerations()
+        self.getBestInd()
+        self.doExport()
+
+
+
 def nsga2vrp():
 
     # Loading the instance
@@ -506,9 +624,22 @@ def nsga2vrp():
 
 if __name__ == "__main__":
     print("Running file directly, Executing nsga2vrp")
-    nsga2vrp()
+    # nsga2vrp()
+    someinstance = nsgaTest()
+    someinstance.runMain()
+    # someinstance.generatingPopFitness()
+    #
+    # print(f"Pop here is {someinstance.pop[0]}")
+    # print(f"Fit here is {someinstance.pop[0].fitness.values}")
+    # # Running generations
+    # someinstance.runGenerations()
 
-# nsga2vrp()
+    # someinstance.testFunc()
+
+
+
+
+
 
 def testcosts():
     # Sample instance
