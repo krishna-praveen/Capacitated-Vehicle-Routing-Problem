@@ -422,7 +422,7 @@ The final combination of routes is the best route that is generated at the end o
 combination of parameters
 
 ### Distance Travelled vs Generations
-![image info](./figures/Input_data_pop400_crossprob0.8_mutprob0.02_numgen150.png)
+![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen150.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen180.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen200.png)
 ![image info](./figures/Input_Data_pop400_crossProb0.8_mutProb0.02_numGen220.png)
