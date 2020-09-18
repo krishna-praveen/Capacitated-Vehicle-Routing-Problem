@@ -273,75 +273,7 @@ def exportCsv(csv_file_name, logbook):
         print("I/O error")
 
 
-def simpleGA():
-
-    def costFunc(individual):
-        cost = getRouteCost(individual, json_instance, unit_cost=1)
-        return cost,
-
-    def cxPartialyMatchedNew(ind1, ind2):
-        ind1 = [x - 1 for x in ind1]
-        ind2 = [x - 1 for x in ind2]
-        size = min(len(ind1), len(ind2))
-        p1, p2 = [0] * size, [0] * size
-
-        # Initialize the position of each indices in the individuals
-        for i in range(size):
-            p1[ind1[i]] = i
-            p2[ind2[i]] = i
-        # Choose crossover points
-        cxpoint1 = random.randint(0, size)
-        cxpoint2 = random.randint(0, size - 1)
-        if cxpoint2 >= cxpoint1:
-            cxpoint2 += 1
-        else:  # Swap the two cx points
-            cxpoint1, cxpoint2 = cxpoint2, cxpoint1
-
-        # Apply crossover between cx points
-        for i in range(cxpoint1, cxpoint2):
-            # Keep track of the selected values
-            temp1 = ind1[i]
-            temp2 = ind2[i]
-            # Swap the matched value
-            ind1[i], ind1[p1[temp2]] = temp2, temp1
-            ind2[i], ind2[p2[temp1]] = temp1, temp2
-            # Position bookkeeping
-            p1[temp1], p1[temp2] = p1[temp2], p1[temp1]
-            p2[temp1], p2[temp2] = p2[temp2], p2[temp1]
-
-        return ind1, ind2
-
-    json_instance = load_instance('./data/json/Input_Data.json')
-    ind_size = json_instance["Number_of_customers"]
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-    creator.create("Individual", list,fitness=creator.FitnessMin)
-    toolbox = base.Toolbox()
-    toolbox.register("indices", random.sample, range(1, ind_size + 1), ind_size)
-
-    # Structure initializers
-    toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
-    toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("mate", cxPartialyMatchedNew)
-    toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
-    toolbox.register("select", tools.selTournament, tournsize=3)
-    toolbox.register("evaluate", costFunc)
-    random.seed(169)
-    pop = toolbox.population(n=300)
-    print(f"Pop1 is {pop[0]}")
-    hof = tools.HallOfFame(1)
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("avg", numpy.mean)
-    stats.register("std", numpy.std)
-    stats.register("min", numpy.min)
-    stats.register("max", numpy.max)
-
-    algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 40, stats=stats,
-                        halloffame=hof)
-
-    return pop, stats, hof
-
-
-class nsgaTest(object):
+class nsgaAlgo(object):
 
     def __init__(self):
         self.json_instance = load_instance('./data/json/Input_Data.json')
@@ -625,7 +557,7 @@ def nsga2vrp():
 if __name__ == "__main__":
     print("Running file directly, Executing nsga2vrp")
     # nsga2vrp()
-    someinstance = nsgaTest()
+    someinstance = nsgaAlgo()
     someinstance.runMain()
     # someinstance.generatingPopFitness()
     #

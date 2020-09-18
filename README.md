@@ -15,6 +15,7 @@ Multiobjective python implementation of capacitated vehicle routing
     - [Text File Format](#text-file-format)
     - [JSON Format](#json-format)
     - [Convert `*.txt` to `*.json`](#convert-txt-to-json)
+- [Running Algorithm](#running-algorithm)
 - [Algorithm Selection](#algoritm-selection)
 - [Assumptions](#assumptions)
 - [NSGA-II Implementation](#nsga-ii-implementation)
@@ -168,6 +169,30 @@ Run the `parseText2Json.py` to convert `*.txt` file to `*.json` file.
 ```sh
 python parseText2Json.py
 ```
+
+
+## Running Algorithm
+To run the algorithm activate the virtual environment that you have named and run this command
+
+```sh
+python runAlgo.py 
+```
+
+Additionally you can specify arguments to change the hyperparameters or even file names. The 
+following arguments are available
+
+```sh
+python runAlgo.py --popSize=300 --crossProb=0.7 --mutProb=0.01 --numGen=320
+```
+
+ - `--pop_size` : Specify the number of population that is generated
+ - `--crossProb` : Cross over probability that needs to be considered
+ - `--mutProb` : Mutation probability 
+ - `--numGen` : Number of generations that you want the algorithm to run
+
+On doing so the above, the following result file will be generated in the `results` directory
+`Input_Data_pop300_crossProb0.7_mutProb0.01_numGen320.csv` which can later be used to plot results from them.
+
 ## Algorithm Selection
 Multiobjective optimization of travelling salesman is a NP-hard problem.
 So simple Genetic algorithm cannot compute good solutions when there are
@@ -456,7 +481,7 @@ combination of parameters
 ├── plots/
 │   ├── __init__.py
 │   └── plotGenerations.py
-│   └── plotResults.py
+│   └── plotVehicleRoutes.py
 ├── results/
 │   └── ...
 ├── nsga_vrp/
@@ -469,6 +494,7 @@ combination of parameters
 │   └── test_route.py
 ├── parseText2Json.py
 ├── plotAllResults.py
+├── runAlgo.py
 ├── requirements.txt
 ├── README.md
 ├── LICENSE
@@ -483,10 +509,11 @@ combination of parameters
 
 
 ## Future Improvements
-1. Adding Input file selection to run a problem on
-2. Test cases for mutation , crossover and selection
-3. Web based interface to Input data and see the graphs and Optimal route
-4. Comparison of frameworks and hyperparameter optimization
+
+1. Test cases for mutation , crossover and selection
+2. Web based interface to Input data and see the graphs and Optimal route
+3. Comparison of frameworks and hyperparameter optimization
+4. Gifs of transporation route and how is it changing with generations
 
 ## License
 MIT License

@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c195555-668f-4bf1-a9da-41794b9d89be" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop320_crossProb0.69_mutProb0.015_numGen420.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.75_mutProb0.02_numGen300.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/runAlgo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" beforeDir="false" afterPath="$PROJECT_DIR$/nsga_vrp/NSGA2_vrp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.csv" beforeDir="false" afterPath="$PROJECT_DIR$/results/Input_Data_pop400_crossProb0.85_mutProb0.02_numGen150.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample_customized_data_25_copy.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +76,7 @@
       <workItem from="1600274420138" duration="5545000" />
       <workItem from="1600321407035" duration="9499000" />
       <workItem from="1600342623662" duration="17063000" />
+      <workItem from="1600407494849" duration="2280000" />
     </task>
     <servers />
   </component>
