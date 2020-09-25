@@ -369,21 +369,22 @@ B = 8 H 1 | 2 3 10 | 9 H 4 H
 ```
 Now these holes are filled with a sliding motion towards left.
 To understand this in better way imagine that holes `H` are rocks and
-middle portion in between | | is a pond, rest numbers will flot but only in the
+middle portion in between | | is a pond, rest numbers will float but only in the
 first and last regions. Say that if hole `H` comes in pond it is stuck there and cant get out.
+And also all the numbers in the right tail that is `9 * 4 *` are also stuck there.
 So , we start moving entire thing slowly left, 
 
 ```
 After 1 digit displacement towards left
-B = H 1 2 | 3 10 9 | H 4 H 8
+B = H 1 2 | 3 10 H | 9 4 H 8
 
 After another digit displacement
-B = 1 2 3 | 10 9 H | 4 H 8 H
+B = 1 2 3 | 10 H H | 9 4 8 H
 
 After another digit displacement
-B = 2 3 10 | 9 H 4 | H 8 H 1
+B = 2 3 10 | H H H  | 9 4 8 1
 
-Remember that H cannot escape in between | |
+Remember that H cannot escape in between | | and alos numbers cannot escape the last tail
 ```
 
 After full sliding motion and filling portion in between | |
@@ -393,9 +394,21 @@ we have the following `B`
 B = 2 3 10 | H H H | 9 4 8 1
 ```
 
-Similarily repeating this process for A will result
+Similarily repeating this process for A - 
 
 ```
+A = 9 8 4 | 5 6 7 | 1 H H H
+
+After 1 digit displacement towards left
+
+A = 8 4 5 | 6 7 H | 1 H H 9
+
+After another digit displacement
+
+A = 4 5 6 | 7 H H | 1 H 9 8
+
+After another digit displacement
+
 A = 5 6 7 | H H H | 1 9 8 4
 ```
 
